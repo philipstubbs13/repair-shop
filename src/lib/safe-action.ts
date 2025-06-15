@@ -1,3 +1,4 @@
+import { type NeonDbError } from "@neondatabase/serverless";
 import * as Sentry from "@sentry/nextjs";
 import { createSafeActionClient } from "next-safe-action";
 import { z } from "zod";
@@ -10,6 +11,14 @@ export const actionClient = createSafeActionClient({
   },
   handleServerError(e, utils) {
     const { clientInput, metadata } = utils;
+
+    if (e.constructor.name === "NeonDbError") {
+      const { code, detail } = e as NeonDbError;
+      if (code === "23505") {
+        return `Unique entry required. ${detail}`;
+      }
+    }
+
     Sentry.captureException(e, (scope) => {
       scope.clear();
       scope.setContext("serverError", { message: e.message });

@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 export const metadata = {
   title: "Page Not Found",
 };
@@ -8,6 +10,9 @@ export default function NotFound() {
       <div className="mx-auto py-4 flex flex-col justify-center items-center gap-4">
         <h2 className="text-2xl">Page Not Found</h2>
       </div>
+      <Link href="/tickets" className="text-center hover:underline">
+        <h3>Go Home</h3>
+      </Link>
     </div>
   );
 }
